@@ -1,7 +1,7 @@
 .container {
   display: grid;
   gap: 20px;
-
+  max-width: 300px;
   padding: 10px;
 
   border: 1px solid #000;
@@ -63,4 +63,10 @@
 }
 .btn:active {
   transform: scale(0.95);
+}
+.error {
+  margin-block: 6px 0;
+
+  color: #f15959;
+  font-size: 0.9rem;
 }

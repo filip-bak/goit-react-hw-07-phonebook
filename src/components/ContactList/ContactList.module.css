@@ -17,10 +17,10 @@
 .item::before {
   content: '';
   position: absolute;
-
   left: -25px;
   top: 3px;
   width: 18px;
+  height: 18px;
   aspect-ratio: 1;
   background-image: url('/src/images/contacts.svg');
 }
@@ -31,10 +31,10 @@
 }
 
 .phone-number {
-  width: fit-content;
 }
 .btn {
   width: 20px;
+  height: 20px;
   aspect-ratio: 1;
   padding: 0;
   margin-left: 5px;
