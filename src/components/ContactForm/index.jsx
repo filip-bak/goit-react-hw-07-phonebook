@@ -1,27 +1,35 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-import { getContacts } from 'redux/selectors';
+import {
+  selectContacts,
+  selectError,
+  selectisLoading,
+} from 'redux/contacts/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/actions';
+import { addContact } from 'redux/contacts/actions';
+import { Spinner } from 'components/Spinner';
+import { isContactExist } from 'redux/utils/validation';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
+
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectisLoading);
+  const error = useSelector(selectError);
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    for (const contact of contacts) {
-      if (contact.name === name) {
-        return alert(`${name} is already in contacts.`);
-      }
+    if (isContactExist(contacts, name)) {
+      alert(`${name} is already in contacts.`);
+      return;
     }
 
-    dispatch(addContact(name, number));
+    dispatch(addContact({ name: name, number: number }));
 
     setName('');
     setNumber('');
@@ -62,9 +70,13 @@ const ContactForm = () => {
           />
           <span className={styles.status}></span>
         </label>
-        <button className={styles.btn} type="submit">
-          Add contact
-        </button>
+        <div className="relative">
+          <button className={styles.btn} type="submit">
+            Add contact
+          </button>
+          {isLoading && !error && <Spinner color="rgb(33, 176, 243)" />}
+          {error && <p className={styles.error}>Oops! Something went wrong</p>}
+        </div>
       </form>
     </div>
   );

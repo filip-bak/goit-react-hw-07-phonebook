@@ -1,34 +1,29 @@
 import styles from './ContactList.module.css';
 
-import { getContacts, getFilter } from 'redux/selectors';
+import { selectFilteredContacts } from 'redux/filter/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeContact } from 'redux/actions';
+import { removeContact } from 'redux/contacts/actions';
 
 const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-
   const dispatch = useDispatch();
+
+  const filteredContacts = useSelector(selectFilteredContacts);
 
   const handleRemoveContact = id => dispatch(removeContact(id));
 
-  const filteredContacts = () => {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter)
-    );
-  };
-
   return (
     <ul className={styles.list}>
-      {filteredContacts().map(({ id, name, number }) => {
+      {filteredContacts.map(({ id, name, phone }) => {
         return (
           <li className={styles.item} key={id}>
             <span className={styles.name}>{name}:</span>&nbsp;
-            <span className={styles['phone-number']}>{number}</span>
-            <button
-              className={styles.btn}
-              onClick={() => handleRemoveContact(id)}
-            ></button>
+            <div>
+              <span className={styles['phone-number']}>{phone}</span>
+              <button
+                className={styles.btn}
+                onClick={() => handleRemoveContact(id)}
+              ></button>
+            </div>
           </li>
         );
       })}
